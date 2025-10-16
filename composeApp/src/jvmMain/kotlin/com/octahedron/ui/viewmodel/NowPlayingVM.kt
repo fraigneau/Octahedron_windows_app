@@ -1,7 +1,7 @@
 package com.octahedron.ui.viewmodel
 
-import com.octahedron.data.NowPlayingBridge
-import com.octahedron.data.NowPlayingUiState
+import com.octahedron.data.NowPlaying.NowPlayingBridge
+import com.octahedron.data.NowPlaying.NowPlayingUiState
 import com.octahedron.ui.helper.loadBitmap
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableStateFlow

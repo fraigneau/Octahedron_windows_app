@@ -1,4 +1,4 @@
-package com.octahedron.data
+package com.octahedron.data.NowPlaying
 
 import kotlinx.serialization.Serializable
 
