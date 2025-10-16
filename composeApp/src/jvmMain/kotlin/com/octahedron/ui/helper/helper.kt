@@ -1,6 +1,12 @@
 package com.octahedron.ui.helper
 
+import org.jetbrains.skia.Bitmap
+import org.jetbrains.skia.Image
+import org.jetbrains.skia.ImageInfo
+import java.io.File
+import java.nio.file.Files
 import java.time.Instant
+import org.jetbrains.skia.*
 
 fun durationOrBlank(ms: Long?): String? =
     ms?.let { formatHms(it) }
@@ -29,4 +35,28 @@ fun formatInstantShort(instant: Instant?): String {
     } else {
         "${dt.dayOfMonth}/${dt.monthValue} %02d:%02d:%02d".format(dt.hour, dt.minute, dt.second)
     }
+}
+
+fun loadBitmap(path: String?): Bitmap? {
+    if (path.isNullOrBlank()) return null
+    val file = File(path)
+    if (!file.exists() || file.length() == 0L) return null
+
+    return runCatching {
+        val bytes = Files.readAllBytes(file.toPath())
+        val img = Image.makeFromEncoded(bytes)
+
+        val info = ImageInfo(
+            img.width,
+            img.height,
+            ColorType.N32,
+            ColorAlphaType.PREMUL,
+            ColorSpace.sRGB
+        )
+
+        val bmp = Bitmap()
+        bmp.allocPixels(info, 0)
+        img.readPixels(bmp)
+        bmp
+    }.getOrNull()
 }

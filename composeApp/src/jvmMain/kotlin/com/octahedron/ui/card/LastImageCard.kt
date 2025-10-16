@@ -1,6 +1,5 @@
 package com.octahedron.ui.card
 
-
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,7 +8,6 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.octahedron.ui.helper.AlbumArt
@@ -27,6 +25,8 @@ fun LastImageCard(
     artist: String? = null,
     album: String? = null,
     durationMs: Long? = null,
+    currentMs: Long? = null,
+    isPlaying: Boolean = false,
     modifier: Modifier = Modifier,
     onOpen: (() -> Unit)? = null
 ) {
@@ -41,6 +41,36 @@ fun LastImageCard(
         DateTimeFormatter.ofPattern(datePattern).withZone(ZoneId.systemDefault())
     }
 
+    val dur = (durationMs ?: 0L).coerceAtLeast(1L)
+    var basePos by remember { mutableStateOf(currentMs ?: 0L) }
+    var baseTime by remember { mutableStateOf(System.nanoTime()) }
+    var shownPos by remember { mutableStateOf(basePos) }
+
+    LaunchedEffect(currentMs) {
+        val now = System.nanoTime()
+        val predicted = basePos + (now - baseTime) / 1_000_000
+        val incoming = (currentMs ?: 0L).coerceIn(0, dur)
+        val delta = incoming - predicted
+
+        if (kotlin.math.abs(delta) > 1500) {
+            shownPos = incoming
+        }
+        basePos = shownPos
+        baseTime = now
+    }
+
+    LaunchedEffect(isPlaying, dur, basePos, baseTime) {
+        if (!isPlaying) return@LaunchedEffect
+        while (isPlaying) {
+            withFrameNanos { t ->
+                val elapsed = (t - baseTime) / 1_000_000
+                shownPos = (basePos + elapsed).coerceIn(0, dur)
+            }
+        }
+    }
+
+    val progress = (shownPos / dur.toFloat()).coerceIn(0f, 1f)
+
     val noTrack = lastImageName == null &&
             artist.isNullOrBlank() &&
             album.isNullOrBlank() &&
@@ -53,12 +83,6 @@ fun LastImageCard(
                 .padding(12.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            Text(
-                text = titleText,
-                style = MaterialTheme.typography.titleMedium,
-                fontWeight = FontWeight.SemiBold
-            )
-
             if (!noTrack && lastImageName == null && lastImageAt == null && bitmap == null) {
                 Text(
                     emptyText,
@@ -73,14 +97,14 @@ fun LastImageCard(
                 ) {
                     Box(
                         modifier = Modifier
-                            .size(72.dp)
+                            .size(90.dp)
                             .clip(RoundedCornerShape(8.dp))
                             .let { m -> if (onOpen != null) m.clickable { onOpen() } else m },
                         contentAlignment = Alignment.Center
                     ) {
                         AlbumArt(
                             bitmap = bitmap,
-                            sizeDp = 72,
+                            sizeDp = 240,
                         )
                     }
 
@@ -119,27 +143,28 @@ fun LastImageCard(
                             )
                         }
 
-                        val duration = if (noTrack) {
-                            "4:44"
-                        } else {
-                            durationMs?.let { formatHms(it) }
-                        }
-
-                        val whenTxt = formatter.format(
-                            if (noTrack) Instant.now() else (lastImageAt ?: Instant.now())
-                        )
-
-                        val tail = listOfNotNull(duration, whenTxt)
-                            .joinToString(tailSep)
-                            .ifBlank { null }
-
-                        tail?.let {
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
                             Text(
-                                text = it,
+                                text = formatHms(shownPos),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                            Text(
+                                text = durationMs?.let { formatHms(it) } ?: "—:—",
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         }
+                        LinearProgressIndicator(
+                            progress = { progress },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(6.dp)
+                                .clip(RoundedCornerShape(999.dp))
+                        )
                     }
                 }
             }

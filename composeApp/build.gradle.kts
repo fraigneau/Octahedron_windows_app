@@ -39,10 +39,16 @@ compose.desktop {
         mainClass = "com.octahedron.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
+            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Exe)
             packageName = "octahedron"
             vendor = "octahedron"
-            packageVersion = "1.0.1.1"
+            packageVersion = "1.0.3"
+            windows {
+                menuGroup = "Octahedron"
+                dirChooser = true
+                perUserInstall = false
+                shortcut = true
+            }
         }
     }
 }
