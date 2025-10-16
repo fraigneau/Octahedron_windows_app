@@ -39,7 +39,7 @@ compose.desktop {
         mainClass = "com.octahedron.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb, TargetFormat.Exe)
+            targetFormats(TargetFormat.Msi, TargetFormat.Exe)
             packageName = "octahedron"
             vendor = "octahedron"
             packageVersion = "1.0.3"
