@@ -16,6 +16,12 @@ object NowPlayingBridge {
         return File(base, "Octahedron/runtime").apply { mkdirs() }
     }
 
+    private fun purgeOldExecutables(keep: File? = null) {
+        val dir = runtimeDir()
+        dir.listFiles { f -> f.isFile && f.name.startsWith("NowPlayingBridge-") && f.name.endsWith(".exe") }
+            ?.forEach { f -> if (keep == null || f.absolutePath != keep.absolutePath) runCatching { f.delete() } }
+    }
+
     private fun extractEphemeral(): File {
         val dir = runtimeDir().toPath()
         val tmp = Files.createTempFile(dir, "NowPlayingBridge-", ".exe")
@@ -29,6 +35,7 @@ object NowPlayingBridge {
 
     fun start(onUpdate: (NowPlayingData?) -> Unit) {
         if (process?.isAlive == true) return
+        purgeOldExecutables()
         val exe = runCatching { extractEphemeral() }.getOrElse { return }
         process = runCatching {
             ProcessBuilder(exe.absolutePath).directory(exe.parentFile).redirectErrorStream(true).start()
@@ -53,5 +60,6 @@ object NowPlayingBridge {
         runCatching { process?.destroy() }
         job?.cancel()
         process = null
+        purgeOldExecutables()
     }
 }
