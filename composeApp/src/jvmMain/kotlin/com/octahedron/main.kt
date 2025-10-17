@@ -8,11 +8,18 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.window.*
+import com.octahedron.data.db.AppPaths
+import com.octahedron.data.db.Db
 import com.octahedron.ui.App
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun main() = application {
+
+    // db
+    val dbPath = AppPaths.dbPath()
+    Db.connect(dbPath)
+    Db.migrate()
 
     val windowState = rememberWindowState(
         placement = WindowPlacement.Floating,

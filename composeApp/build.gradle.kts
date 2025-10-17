@@ -22,6 +22,13 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.kotlinx.serialization.json)
+
+            // Exposed for database handling
+            implementation("org.jetbrains.exposed:exposed-core:0.56.0")
+            implementation("org.jetbrains.exposed:exposed-dao:0.56.0")
+            implementation("org.jetbrains.exposed:exposed-jdbc:0.56.0")
+            implementation("org.jetbrains.exposed:exposed-java-time:0.56.0")
+            implementation("org.xerial:sqlite-jdbc:3.46.1.3")
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
@@ -29,6 +36,9 @@ kotlin {
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
             implementation(libs.kotlinx.coroutinesSwing)
+            implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.9.0")
+            implementation("org.slf4j:slf4j-simple:2.0.16")
+
         }
     }
 }
@@ -39,10 +49,10 @@ compose.desktop {
         mainClass = "com.octahedron.MainKt"
 
         nativeDistributions {
-            targetFormats(TargetFormat.Msi, TargetFormat.Exe)
+            targetFormats(TargetFormat.Msi)
             packageName = "octahedron"
             vendor = "octahedron"
-            packageVersion = "1.0.3"
+            packageVersion = "1.0.4"
             windows {
                 menuGroup = "Octahedron"
                 dirChooser = true
