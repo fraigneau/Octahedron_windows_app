@@ -1,5 +1,7 @@
 package com.octahedron.data.NowPlaying
 
+import com.octahedron.data.model.Track
+import com.octahedron.data.repository.TrackRepository
 import kotlinx.coroutines.*
 import kotlinx.serialization.json.Json
 import java.io.File
@@ -50,10 +52,13 @@ object NowPlayingBridge {
                         val resp = json.decodeFromString<NowPlayingResponse>(line)
                         onUpdate(resp.data)
                         println("NowPlayingBridge: $resp")
+                        if (resp.data != null)
+                            TrackRepository.insert(resp.data.title.toString(), resp.data.durationSeconds?.toLong() ?: 0L)
                     }
                 }
             }
         }
+
     }
 
     fun stop() {
