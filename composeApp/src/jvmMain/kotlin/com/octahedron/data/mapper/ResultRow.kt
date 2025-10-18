@@ -9,3 +9,8 @@ fun ResultRow.toTrack() = Track(
     title = this[Tracks.title],
     duration = this[Tracks.duration]
 )
+
+fun ResultRow.toArtist() = Artist(
+    uid = this[Artists.id].value,
+    name = this[Artists.name]
+)
