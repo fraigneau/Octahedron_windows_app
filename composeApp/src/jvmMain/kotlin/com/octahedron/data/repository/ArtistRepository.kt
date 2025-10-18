@@ -10,10 +10,10 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object ArtistRepository {
-    fun insert(artist: Artist) {
+    fun insert(artist: Artist): Artist? = transaction {
         val existing = Artists.selectAll().where { Artists.name eq artist.name }.singleOrNull()
         if (existing != null) {
-            return
+            null
         } else {
             val id = Artists.insertAndGetId {
                 it[Artists.name] = artist.name
