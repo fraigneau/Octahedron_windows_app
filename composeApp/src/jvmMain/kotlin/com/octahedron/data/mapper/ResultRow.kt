@@ -19,3 +19,8 @@ fun ResultRow.toAlbum() = Album(
     uid = this[Albums.id].value,
     title = this[Albums.title],
 )
+
+fun ResultRow.toTrackAlbum() = TrackAlbum(
+    trackId = this[TracksAlbums.trackId].value,
+    albumId = this[TracksAlbums.albumId].value
+)

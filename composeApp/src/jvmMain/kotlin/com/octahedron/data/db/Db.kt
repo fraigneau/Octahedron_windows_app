@@ -3,6 +3,7 @@ package com.octahedron.data.db
 import com.octahedron.data.db.table.Albums
 import com.octahedron.data.db.table.Artists
 import com.octahedron.data.db.table.Tracks
+import com.octahedron.data.db.table.TracksAlbums
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 
@@ -18,6 +19,6 @@ object Db {
     }
 
     fun migrate() = transaction {
-        SchemaUtils.createMissingTablesAndColumns(Tracks, Artists, Albums)
+        SchemaUtils.createMissingTablesAndColumns(Tracks, Artists, Albums, TracksAlbums)
     }
 }
