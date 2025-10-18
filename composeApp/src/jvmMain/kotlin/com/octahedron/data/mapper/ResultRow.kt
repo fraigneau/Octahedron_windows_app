@@ -14,3 +14,8 @@ fun ResultRow.toArtist() = Artist(
     uid = this[Artists.id].value,
     name = this[Artists.name]
 )
+
+fun ResultRow.toAlbum() = Album(
+    uid = this[Albums.id].value,
+    title = this[Albums.title],
+)
