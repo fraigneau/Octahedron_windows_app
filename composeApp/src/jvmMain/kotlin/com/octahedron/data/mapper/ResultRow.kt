@@ -24,3 +24,8 @@ fun ResultRow.toTrackAlbum() = TrackAlbum(
     trackId = this[TracksAlbums.trackId].value,
     albumId = this[TracksAlbums.albumId].value
 )
+
+fun ResultRow.toTrackArtist() = TrackArtists(
+    trackId = this[TracksArtists.trackId].value,
+    artistId = this[TracksArtists.artistId].value
+)
