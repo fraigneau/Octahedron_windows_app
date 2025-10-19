@@ -2,6 +2,7 @@ package com.octahedron.data.db
 
 import com.octahedron.data.db.table.Albums
 import com.octahedron.data.db.table.Artists
+import com.octahedron.data.db.table.ListeningHistories
 import com.octahedron.data.db.table.Tracks
 import com.octahedron.data.db.table.TracksAlbums
 import com.octahedron.data.db.table.TracksArtists
@@ -20,6 +21,12 @@ object Db {
     }
 
     fun migrate() = transaction {
-        SchemaUtils.createMissingTablesAndColumns(Tracks, Artists, Albums, TracksAlbums, TracksArtists)
+        SchemaUtils.createMissingTablesAndColumns(
+            Tracks,
+            Artists,
+            Albums,
+            TracksAlbums,
+            TracksArtists,
+            ListeningHistories)
     }
 }
