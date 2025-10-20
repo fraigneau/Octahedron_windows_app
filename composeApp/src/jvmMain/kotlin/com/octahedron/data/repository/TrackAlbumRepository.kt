@@ -13,10 +13,10 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 object TrackAlbumRepository {
 
-    fun addLink(trackId: Long, artistId: Long) = transaction {
+    fun addLink(trackId: Long, albumId: Long) = transaction {
         TracksArtists.insertIgnore {
-            it[TracksArtists.trackId] = trackId
-            it[TracksArtists.artistId] = artistId
+            it[TracksAlbums.trackId] = trackId
+            it[TracksAlbums.albumId] = albumId
         }
     }
     fun getAlbumsForTrack(trackId: Long): Album? = transaction {
