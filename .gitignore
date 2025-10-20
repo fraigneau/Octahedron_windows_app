@@ -20,3 +20,4 @@ node_modules/
 /composeApp/cover.jpg
 /composeApp/src/jvmMain/resources/bin/*
 
+/composeApp/app.db
