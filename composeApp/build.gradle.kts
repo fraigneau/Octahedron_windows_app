@@ -9,7 +9,15 @@ plugins {
 }
 
 kotlin {
-    jvm()
+    jvm {
+        testRuns {
+            named("test") {
+                executionTask.configure {
+                    useJUnitPlatform()
+                }
+            }
+        }
+    }
     
     sourceSets {
         commonMain.dependencies {
@@ -32,6 +40,7 @@ kotlin {
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
+            implementation("org.junit.jupiter:junit-jupiter-engine:5.11.3")
         }
         jvmMain.dependencies {
             implementation(compose.desktop.currentOs)
@@ -40,6 +49,14 @@ kotlin {
             implementation("org.slf4j:slf4j-simple:2.0.16")
 
         }
+    }
+}
+
+tasks.withType<Test> {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+        showStandardStreams = true
     }
 }
 
