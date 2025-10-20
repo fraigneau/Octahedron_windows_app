@@ -1,9 +1,8 @@
 package com.octahedron.data.repository
 
 import com.octahedron.data.db.table.Albums
-import com.octahedron.data.mapper.toArtist
+import com.octahedron.data.mapper.toAlbum
 import com.octahedron.data.model.Album
-import com.octahedron.data.model.Artist
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insertAndGetId
@@ -11,22 +10,22 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object AlbumRepository {
-    fun insert(artist: Artist): Album = transaction {
-        val existing = Albums.selectAll().where { Albums.title eq artist.name }.singleOrNull()
+    fun insert(album: Album): Album = transaction {
+        val existing = Albums.selectAll().where { Albums.title eq album.title }.singleOrNull()
         (if (existing != null) {
             null
         } else {
             val id = Albums.insertAndGetId {
-                it[Albums.title] = artist.name
+                it[Albums.title] = album.title
             }.value
-            Album(id, artist.name)
+            Album(id, album.title)
         }) as Album
     }
-    fun get(id: Long): Artist? = transaction {
-        Albums.selectAll().where { Albums.id eq id }.singleOrNull()?.toArtist()
+    fun get(id: Long): Album? = transaction {
+        Albums.selectAll().where { Albums.id eq id }.singleOrNull()?.toAlbum()
     }
-    fun list(): List<Artist> = transaction {
-        Albums.selectAll().map { it.toArtist() }
+    fun list(): List<Album> = transaction {
+        Albums.selectAll().map { it.toAlbum() }
     }
     fun delete(id: Long): Boolean = transaction {
         Albums.deleteWhere { Albums.id eq id } > 0
