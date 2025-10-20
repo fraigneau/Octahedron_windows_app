@@ -11,7 +11,7 @@ import org.jetbrains.exposed.sql.insertIgnore
 import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
-object TrackAlbumsRepository {
+object TrackAlbumRepository {
 
     fun addLink(trackId: Long, artistId: Long) = transaction {
         TracksArtists.insertIgnore {
