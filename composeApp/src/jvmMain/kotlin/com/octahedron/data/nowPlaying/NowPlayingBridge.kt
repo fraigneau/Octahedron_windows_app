@@ -1,6 +1,5 @@
-package com.octahedron.data.NowPlaying
+package com.octahedron.data.nowPlaying
 
-import com.octahedron.data.model.Track
 import com.octahedron.data.repository.TrackRepository
 import kotlinx.coroutines.*
 import kotlinx.serialization.json.Json

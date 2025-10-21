@@ -1,4 +1,4 @@
-package com.octahedron.data.NowPlaying
+package com.octahedron.data.nowPlaying
 
 import org.jetbrains.skia.Bitmap
 import java.time.Instant
