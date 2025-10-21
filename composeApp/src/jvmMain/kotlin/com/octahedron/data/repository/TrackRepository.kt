@@ -9,8 +9,8 @@ import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.transaction
 
 object TrackRepository {
-    fun insert(title: String, duration: Long): Track? = transaction {
-        val existing = Tracks.selectAll().where { Tracks.title eq title }.singleOrNull()
+    fun insert(track: Track): Track = transaction {
+        val existing = Tracks.selectAll().where { Tracks.title eq track.title }.singleOrNull()
         if (existing != null) {
             existing.toTrack()
         } else {
@@ -18,7 +18,7 @@ object TrackRepository {
                 it[Tracks.title] = title
                 it[Tracks.duration] = duration
             }.value
-            Track(id, title, duration)
+            Track(id, track.title, track.duration)
         }
     }
     fun get(id: Long): Track? = transaction {
