@@ -12,10 +12,12 @@ import org.jetbrains.exposed.sql.transactions.transaction
 
 object TrackArtistsRepository {
 
-    fun addLink(trackId: Long, artistId: Long) = transaction {
+    // TODO : ajouter le main artist ou le feat !
+    fun addLink(trackId: Long, artistId: Long, isMain: Boolean = true) = transaction {
         TracksArtists.insertIgnore {
             it[TracksArtists.trackId] = trackId
             it[TracksArtists.artistId] = artistId
+            it[TracksArtists.isMain] = isMain
         }
     }
     fun getArtistsForTrack(trackId: Long): List<Artist> = transaction {

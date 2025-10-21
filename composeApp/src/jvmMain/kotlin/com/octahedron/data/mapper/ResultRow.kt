@@ -28,7 +28,7 @@ fun ResultRow.toTrackAlbum() = TrackAlbum(
 fun ResultRow.toTrackArtist() = TrackArtists(
     trackId = this[TracksArtists.trackId].value,
     artistId = this[TracksArtists.artistId].value,
-    role = this[TracksArtists.role]
+    isMain = this[TracksArtists.isMain]
 )
 
 fun ResultRow.toListeningHistory() = ListeningHistory(
