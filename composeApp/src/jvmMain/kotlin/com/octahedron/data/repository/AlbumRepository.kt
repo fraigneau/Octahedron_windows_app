@@ -12,14 +12,14 @@ import org.jetbrains.exposed.sql.transactions.transaction
 object AlbumRepository {
     fun insert(album: Album): Album = transaction {
         val existing = Albums.selectAll().where { Albums.title eq album.title }.singleOrNull()
-        (if (existing != null) {
-            null
+        if (existing != null) {
+            existing.toAlbum()
         } else {
             val id = Albums.insertAndGetId {
                 it[Albums.title] = album.title
             }.value
             Album(id, album.title)
-        }) as Album
+        }
     }
     fun get(id: Long): Album? = transaction {
         Albums.selectAll().where { Albums.id eq id }.singleOrNull()?.toAlbum()

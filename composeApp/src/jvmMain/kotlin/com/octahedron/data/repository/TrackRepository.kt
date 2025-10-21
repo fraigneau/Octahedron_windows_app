@@ -12,7 +12,7 @@ object TrackRepository {
     fun insert(title: String, duration: Long): Track? = transaction {
         val existing = Tracks.selectAll().where { Tracks.title eq title }.singleOrNull()
         if (existing != null) {
-            null
+            existing.toTrack()
         } else {
             val id = Tracks.insertAndGetId {
                 it[Tracks.title] = title
