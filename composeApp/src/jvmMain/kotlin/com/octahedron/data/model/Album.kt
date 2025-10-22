@@ -1,7 +1,7 @@
 package com.octahedron.data.model
 
 data class Album(
-    val uid: Long,
+    val uid: Long = 0L,
     var title: String
 ) {
     init {

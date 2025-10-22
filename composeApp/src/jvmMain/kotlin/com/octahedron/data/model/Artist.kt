@@ -1,7 +1,7 @@
 package com.octahedron.data.model
 
 data class Artist(
-    val uid: Long,
+    val uid: Long = 0L,
     var name: String
 ) {
     init {

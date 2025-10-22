@@ -1,7 +1,7 @@
 package com.octahedron.data.model
 
 data class Track(
-    val uid: Long,
+    val uid: Long = 0L,
     var title: String,
     var duration: Long
 ) {
